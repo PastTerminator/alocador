@@ -18,86 +18,6 @@ meualoc::meualoc(int tamanhoMemoria, int politicaMem) {
 
 char *memoria = (char*)malloc(sizeof(char)*tamanhoMemoria1);
 
-struct LinkedList {
-    struct LinkedList *next;
-    int tamanhoBytes; //bound 
-    int base;
-    int tamanho;
-    int tamanhoLista;
-    int resto;
-    int ocupado;
-    char *posicaoVetor;
-};
-
-struct LinkedList* createList () {
-
-    struct LinkedList *Nlist = (struct LinkedList*) malloc(sizeof(struct LinkedList*));
-    Nlist->tamanhoLista = 0;
-    Nlist->next = NULL;
-    return Nlist;
-} 
-
-struct LinkedList* insertList(struct LinkedList *list, int tamanho, char *posicaoPagina) { // aloca um bloco de um tamanho qualquer
-
-    struct LinkedList *aux, *aux2;
-    struct LinkedList *temp = createList();
-    int totalSize = 0;
-    int flag = 0;
-    temp->tamanho = tamanho;
-    temp->posicaoVetor = posicaoPagina;
-    if (list == NULL) {
-        temp->tamanhoBytes = (tamanho - 1);
-        temp->base = 0;
-        totalSize += tamanho;
-        list = temp;
-    } else {
-        
-        aux = list;
-        aux2 = list;
-        while (aux->next != NULL) { 
-            aux = aux->next;
-        }
-        aux->next = temp;
-        while (aux2 != NULL) {
-            totalSize += aux2->tamanho;
-            aux2->tamanhoBytes = (totalSize - 1);
-            aux2->base = (totalSize - aux2->tamanho);
-            aux2 = aux2->next;  
-        }
-    }
-    
-    return list;
-}
-
-int sizeList(struct LinkedList *list) {
-    int size = 0;
-
-    while (list != NULL) {
-        size++;
-        list = list->next;
-    }
-
-    return size;
-}
-
-void printList(struct LinkedList *list1) {
-
-    if (list1 == NULL)
-        printf("Lista vazia\n");
-
-    struct LinkedList *list = list1;
-    while (list != NULL) {
-
-        printf("base (%d) bound (%d) tamanhoLista(%d)\n",list->base, list->tamanhoBytes, list->tamanhoLista);
-
-        list = list->next;
-    }
-
-    printf("\n");
-}
-
-
-
 void printBits(unsigned int num) {
     int vector[16];
 
@@ -121,11 +41,6 @@ int printBitChar(char value) {
     }
     printf("\n");
     return 0;
-}
-
-void bit_set(char bit, char *byte) {
-    bit = 1 << bit;
-    *byte = *byte | bit;
 }
 
 void converterBit(unsigned short int tamanho, char *byteFirst, char *byteLast) {
@@ -153,56 +68,68 @@ unsigned int getBits(char s1, char s2) {
     return finalBits;
 }
 
-struct LinkedList *blocoMemoria = NULL;
 
-char *aloca(unsigned short int tamanho) {
-    unsigned short int numeroMagico = 100;
-    char magicoBegin, magicoEnd;
+char* colocarBitsMemoria(int tamanho) {
+    unsigned short int numeroMagico = 50;
+    char begin, end, magicoBegin, magicoEnd; 
+    converterBit(tamanho, &begin, &end);
     converterBit(numeroMagico, &magicoBegin, &magicoEnd);
 
-    char begin, end;
-    converterBit(tamanho, &begin, &end);
-    int size = sizeList(blocoMemoria);
-    int i = 0;
-    char *posicaoPagina;
-    for (i = 0; i < (size); i++) { 
-    }
-    if (!i) {
-        memoria[0] = begin;
-        memoria[1] = end;
-        memoria[2] = magicoBegin;
-        memoria[3] = magicoEnd;
-        posicaoPagina = &memoria[0];
-        printf("s1 (%d) s2 (%d) magico1 (%d) magico2 (%d) posicaoPagina (%p)\n", memoria[0], memoria[1],
-         memoria[2], memoria[3], posicaoPagina);
-    }
-    if (i > 0) {
-        i *= 4;
-        memoria[i] = begin;
-        printf("s1 (%d) ", memoria[i]);
-        posicaoPagina = &memoria[i];
-        i += 1;
-        memoria[i] = end;
-        printf("s2 (%d) ", memoria[i]);
-        i += 1;
-        memoria[i] = magicoBegin;
-        printf("magico1 (%d) ", memoria[i]);
-        i += 1;
-        memoria[i] = magicoEnd;
-        printf("magico2 (%d) ", memoria[i]);
+    memoria[0] = begin;
+    memoria[1] = end;
+    memoria[2] = magicoBegin;
+    memoria[3] = magicoEnd;
 
-        printf("posicaoPagina (%p)\n", posicaoPagina);
+    return &memoria[0];
+}
 
-    }
+void printBits() { // tem mto print só pra tu entender como funciona, pode retirar dps
+
+    printf("Isto é o tamanho\n");
+    printf("total (%d)\n", getBits(memoria[0], memoria[1]));
+    printf("primeira parte (%d) segunda parte (%d)\n", memoria[0], memoria[1]);
     
-    blocoMemoria = insertList(blocoMemoria, tamanho, posicaoPagina);
+
+    unsigned int bits = getBits(memoria[0], memoria[1]);
+
+    printf("total em bits ");
+    printBits(bits);
+    printf("primeira parte em bits ");
+    printBitChar(memoria[0]);
+    printf("segunda parte em bits ");
+    printBitChar(memoria[1]);
+
+    printf("\n");
+
+    printf("Isto é o número mágico\n");
+
+    printf("total (%d)\n", getBits(memoria[2], memoria[3]));
+    printf("primeira parte (%d) segunda parte (%d)\n", memoria[2], memoria[3]);
+
+
+    bits = getBits(memoria[2], memoria[3]);
+
+    printf("total em bits ");
+    printBits(bits);
+    printf("primeira parte em bits ");
+    printBitChar(memoria[2]);
+    printf("segunda parte em bits ");
+    printBitChar(memoria[3]);
+
+    printf("\n");
+
+
+}
+
+char *aloca(unsigned short int tamanho) {
+    colocarBitsMemoria(tamanho);
+    printBits();
 }
 
 
 int main() {
 
     aloca(100);
-    aloca(200);
-    aloca(600);
+
 
 }
