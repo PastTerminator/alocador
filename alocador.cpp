@@ -54,20 +54,7 @@ struct LinkedList* insertList(struct LinkedList *list, int tamanho, char *posica
         
         aux = list;
         aux2 = list;
-        while (aux->next != NULL) { // first fit
-
-            /*if (!(aux->ocupado)) {
-                if (aux->tamanho > tamanho) {
-                    aux->resto = aux->tamanho - tamanho;
-                    aux->tamanho = tamanho;
-                    
-                    if (!(aux->resto)) {
-                        aux->ocupado = 1;
-                    }
-                    flag = 1; 
-                }    
-            }*/
-
+        while (aux->next != NULL) { 
             aux = aux->next;
         }
         aux->next = temp;
@@ -219,6 +206,3 @@ int main() {
     aloca(600);
 
 }
-
-
-
