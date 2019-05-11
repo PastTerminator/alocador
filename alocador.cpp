@@ -62,6 +62,7 @@ void converterBit(unsigned short int tamanho, char *byteFirst, char *byteLast) {
 unsigned int getBits(char s1, char s2) {
 
     unsigned int first = (s1 & 0xFF);
+    first = first << 8;
     unsigned int last = (s2 & 0xFF);
     unsigned int finalBits = (first | last);
     
