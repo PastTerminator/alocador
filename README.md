@@ -1,6 +1,6 @@
 # Sistemas Operacionais - Alocador
 
-Implementação de um alocador de memória personalizado, inspirado no malloc do linux. Foi feita a utilização de uma lista encadeada simulando os bits de cada blocos, os quais foram manipulados via operações de bit-wise e bit-vector \
+Implementação de um alocador de memória personalizado, inspirado no malloc do linux. Foi feita a utilização de uma lista encadeada simulando os bits de cada blocos, os quais foram manipulados via operações de bit-wise e bit-vector\
 
 Construtor*, que recebe o tamanho da memória a ser alocada e uma constante que diz qual a política de alocação (ver código)\
 Aloca, que recebe um tamanho e retorna um ponteiro para a posição de memória deste tamanho que passe a ser utilizada.\
